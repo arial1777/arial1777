@@ -1,0 +1,29 @@
+/* arial — brand palette
+   出典: キャラクター設定シート下部の公式カラーパレット（実測値）＋ ろぼとのボディカラー */
+
+:root {
+  /* --- 設定シートの7色 --- */
+  --arial-navy-900:  #091434; /* 深藍・ページ地色 */
+  --arial-navy-800:  #27304C; /* ダークスレート・カード地 */
+  --arial-blue-700:  #1042BE; /* ビビッドブルー・プライマリ */
+  --arial-blue-600:  #3860B7; /* くすみ青・ボーダー / サブ */
+  --arial-blue-500:  #2288E2; /* 明るい青・アクセント */
+  --arial-blue-400:  #3488DD; /* 水色寄りの青・リンク */
+  --arial-white:     #EBF4FB; /* 青みがかった白・本文 */
+
+  /* --- 相棒ろぼと --- */
+  --roboto-body:     #3AD1FC; /* ろぼとのボディ */
+  --roboto-line:     #0E273B; /* ろぼとの輪郭線 */
+
+  /* --- 用途別エイリアス --- */
+  --bg:              var(--arial-navy-900);
+  --bg-elevated:     var(--arial-navy-800);
+  --text:            var(--arial-white);
+  --text-muted:      #8FB3D9;
+  --accent:          var(--arial-blue-500);
+  --accent-strong:   var(--arial-blue-700);
+  --border:          #1C2A4E;
+
+  --gradient-hero:   linear-gradient(160deg, #091434 0%, #10265E 55%, #1042BE 140%);
+  --gradient-accent: linear-gradient(90deg, #1042BE 0%, #2288E2 100%);
+}

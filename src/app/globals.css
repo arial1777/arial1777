@@ -1,0 +1,737 @@
+/* ============================================================
+   arial — global styles
+   配色は assets/palette.css（設定シートの公式パレット実測値）に準拠。
+   本文色の組み合わせはすべて WCAG AA（4.5:1）以上を確認済み。
+   ============================================================ */
+
+:root {
+  --navy-900: #091434;
+  --navy-800: #27304c;
+  --blue-700: #1042be;
+  --blue-600: #3860b7;
+  --blue-500: #2288e2;
+  --blue-400: #3488dd;
+  --white: #ebf4fb;
+  --roboto-body: #3ad1fc;
+
+  --bg: var(--navy-900);
+  --surface: #101e48;
+  --text: var(--white);
+  --text-muted: #9cc0e4;
+  --accent: #4fa3ee;
+  --border: #23325c;
+  --border-soft: #1a2750;
+
+  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI",
+    "Yu Gothic", Meiryo, system-ui, sans-serif;
+
+  --measure: 1120px;
+  --section-y: clamp(4.5rem, 10vw, 8rem);
+  --radius: 14px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* ヘッダーの高さぶん、アンカー着地位置をずらす */
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+  font-feature-settings: "palt";
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  margin: 0;
+  font-weight: 700;
+}
+
+p {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  color: var(--white);
+}
+
+:focus-visible {
+  outline: 2px solid var(--roboto-body);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  background: var(--blue-700);
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus-visible {
+  top: 1rem;
+}
+
+.container {
+  width: min(100% - 2.5rem, var(--measure));
+  margin-inline: auto;
+}
+
+/* ---------------- header ---------------- */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--navy-900) 82%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 4rem;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 300;
+  letter-spacing: 0.16em;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.header__nav {
+  display: flex;
+  gap: clamp(0.9rem, 3vw, 1.9rem);
+  font-size: 0.86rem;
+  letter-spacing: 0.08em;
+}
+
+.header__nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.header__nav a:hover {
+  color: var(--text);
+}
+
+/* ---------------- hero ---------------- */
+
+.hero {
+  position: relative;
+  display: grid;
+  align-items: center;
+  min-height: min(86vh, 760px);
+  padding-block: clamp(3rem, 8vw, 5rem);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero__media,
+.hero__mediaImg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__mediaImg {
+  object-fit: cover;
+  /* 縦長の絵。上部の暗い余白を残したいので上寄せ */
+  object-position: 50% 30%;
+}
+
+/*
+ * 見出しが載る領域を暗くする膜。絵の中の明るい波紋の上に白文字が来ると
+ * コントラストが 2.4:1 まで落ちるため、実測して必要な濃さを決めてある。
+ */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(5, 12, 34, 0.9) 0%,
+      rgba(5, 12, 34, 0.74) 30%,
+      rgba(5, 12, 34, 0.52) 50%,
+      rgba(5, 12, 34, 0.26) 66%,
+      rgba(5, 12, 34, 0) 82%
+    ),
+    linear-gradient(0deg, var(--bg) 0%, rgba(9, 20, 52, 0) 24%);
+}
+
+.hero__inner {
+  position: relative;
+  width: min(100% - 2.5rem, var(--measure));
+  margin-inline: auto;
+}
+
+.hero__copy {
+  max-width: 34rem;
+}
+
+.hero__title {
+  font-size: clamp(2rem, 6.4vw, 3.4rem);
+  line-height: 1.35;
+  text-shadow: 0 2px 24px rgba(5, 12, 34, 0.6);
+}
+
+.hero__sub {
+  margin-top: 1.2rem;
+  font-size: clamp(1rem, 2.4vw, 1.15rem);
+  color: var(--text-muted);
+  text-shadow: 0 1px 16px rgba(5, 12, 34, 0.7);
+}
+
+.hero__roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.8rem;
+  padding: 0;
+  list-style: none;
+}
+
+.hero__roles li {
+  padding: 0.3rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(9, 20, 52, 0.78);
+  backdrop-filter: blur(4px);
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2.2rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--blue-700), var(--blue-500));
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  box-shadow: 0 12px 30px -14px rgba(16, 66, 190, 0.9);
+}
+
+.hero__cta:hover {
+  color: #fff;
+  filter: brightness(1.12);
+}
+
+/* ---------------- section ---------------- */
+
+.section {
+  padding-block: var(--section-y);
+}
+
+.section--alt {
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(16, 30, 72, 0.55) 12%,
+    rgba(16, 30, 72, 0.55) 88%,
+    transparent
+  );
+}
+
+.section__head {
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+.section__label {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--blue-500);
+}
+
+.section__label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+
+.section__title {
+  margin-top: 0.8rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+}
+
+.section__intro {
+  margin-top: 1rem;
+  max-width: 46rem;
+  color: var(--text-muted);
+}
+
+/* ---------------- about ---------------- */
+
+.about {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.about__art {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  line-height: 0;
+  align-self: start;
+}
+
+.about__text > p + p {
+  margin-top: 1.2rem;
+}
+
+.about__lead {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.profile {
+  margin: 2.4rem 0 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.1rem 1.4rem;
+  border-top: 1px solid var(--border-soft);
+  padding-top: 1.4rem;
+  font-size: 0.92rem;
+}
+
+.profile dt {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  padding-block: 0.45rem;
+  white-space: nowrap;
+}
+
+.profile dd {
+  margin: 0;
+  padding-block: 0.45rem;
+}
+
+/* ---------------- activities ---------------- */
+
+.activities {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.activity {
+  padding: clamp(1.4rem, 3vw, 2rem);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  background: rgba(16, 30, 72, 0.5);
+}
+
+.activity__index {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--blue-500);
+}
+
+.activity__title {
+  margin-top: 0.7rem;
+  font-size: 1.12rem;
+}
+
+.activity__body {
+  margin-top: 0.8rem;
+  color: var(--text-muted);
+  font-size: 0.94rem;
+}
+
+/* ---------------- works ---------------- */
+
+.works {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.work {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, var(--surface), rgba(9, 20, 52, 0.7));
+  padding: clamp(1.5rem, 4vw, 2.6rem);
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.work__head {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.work__logo {
+  border-radius: 10px;
+  background: #fff;
+  padding: 6px;
+  line-height: 0;
+  flex: none;
+}
+
+.work__name {
+  font-size: 1.3rem;
+}
+
+.work__reading {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+}
+
+.work__status {
+  margin-left: auto;
+  padding: 0.24rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--blue-600);
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.work__tagline {
+  margin-top: 1.4rem;
+  font-size: clamp(1.15rem, 3vw, 1.5rem);
+  line-height: 1.6;
+}
+
+.work__body {
+  margin-top: 1rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.work__block {
+  margin-top: 1.6rem;
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--blue-600);
+}
+
+.work__block--accent {
+  border-left-color: var(--roboto-body);
+}
+
+.work__blockHead {
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.work__blockBody {
+  margin-top: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.work__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1.8rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.work__stack li {
+  padding: 0.24rem 0.7rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  background: rgba(9, 20, 52, 0.6);
+  font-family: var(--font-display);
+  font-size: 0.76rem;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+}
+
+.work__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.4rem;
+  margin-top: 1.6rem;
+  font-size: 0.92rem;
+}
+
+.work__shot {
+  justify-self: center;
+  align-self: start;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  line-height: 0;
+  box-shadow: 0 24px 50px -34px rgba(0, 0, 0, 0.9);
+}
+
+/* ---------------- roboto ---------------- */
+
+.roboto {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  background: rgba(16, 30, 72, 0.45);
+  padding: clamp(1.5rem, 4vw, 2.8rem);
+}
+
+.roboto__figure {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.roboto__bubble {
+  position: relative;
+  align-self: flex-start;
+  margin-bottom: 1.2rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--navy-900);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.roboto__bubble::after {
+  content: "";
+  position: absolute;
+  left: 1.1rem;
+  bottom: -0.42rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  background: var(--white);
+  clip-path: polygon(0 0, 100% 0, 18% 100%);
+}
+
+.roboto__text > p + p {
+  margin-top: 1.1rem;
+}
+
+.roboto__text p {
+  color: var(--text-muted);
+}
+
+/* ---------------- footer ---------------- */
+
+.footer {
+  border-top: 1px solid var(--border-soft);
+  padding-block: 2.5rem 3.5rem;
+  color: var(--text-muted);
+  font-size: 0.84rem;
+}
+
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem 1.5rem;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.footer__note {
+  color: #8db1d8;
+}
+
+/* ---------------- responsive ---------------- */
+
+@media (min-width: 700px) {
+  .activities {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .roboto {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .about {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .work--withShot {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------------- サイズ指定・補助 ---------------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.about__art {
+  width: min(326px, 100%);
+}
+
+.about__art img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.work__logo img,
+.roboto__figure img {
+  display: block;
+}
+
+.work__shot {
+  width: 232px;
+  max-width: 100%;
+}
+
+.work__shot img {
+  width: 100%;
+  height: auto;
+}
+
+.work__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* 日本語の見出しは文節で折り返す。auto-phrase 非対応ブラウザでは通常の折り返しになる */
+h1,
+h2,
+h3,
+.work__tagline,
+.hero__sub {
+  word-break: auto-phrase;
+}
+
+/* 句点で区切った塊の途中では改行させない */
+.hero__title span {
+  display: inline-block;
+}
+
+/* 欧文は 300/500/600 の3ウェイトだけ読み込んでいる。合成太字を避けるため明示する */
+.work__stack li {
+  font-weight: 500;
+}
+
+/* 横長では絵の中にキャラクターがいるので、膜は左からかける */
+@media (min-width: 900px) {
+  .hero__mediaImg {
+    object-position: 62% 42%;
+  }
+
+  .hero__scrim {
+    background:
+      linear-gradient(
+        100deg,
+        rgba(5, 12, 34, 0.93) 0%,
+        rgba(5, 12, 34, 0.8) 26%,
+        rgba(5, 12, 34, 0.45) 50%,
+        rgba(5, 12, 34, 0.08) 70%,
+        rgba(5, 12, 34, 0) 82%
+      ),
+      linear-gradient(0deg, var(--bg) 0%, rgba(9, 20, 52, 0) 22%);
+  }
+}
+
+/* 水面のテクスチャ。ヒーローの読み込みと競合させないよう、下のセクションにだけ敷く */
+.section--alt {
+  position: relative;
+  isolation: isolate;
+}
+
+.section--alt::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: url("../../assets/textures/water-tile.webp");
+  background-size: 256px 256px;
+  opacity: 0.5;
+  pointer-events: none;
+}
