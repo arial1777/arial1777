@@ -3,9 +3,40 @@
  * 表示側は文言を持たないので、直したいときはこのファイルだけを見ればよい。
  */
 
-export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
-).replace(/\/+$/, "");
+/**
+ * 公開URLの決め方。上から順に、使えるものを使う。
+ *
+ * 1. NEXT_PUBLIC_SITE_URL（明示設定）
+ * 2. Vercel の本番ドメイン（環境変数を入れ忘れてもビルドは通る）
+ * 3. http://localhost:3000
+ *
+ * `??` ではなく空文字も弾いているのは、Vercel で変数だけ作って値を空のまま
+ * 置いておくと `new URL("")` がビルドを落とすため。値が壊れているときも
+ * 同じ理由で捨てる。
+ */
+function resolveSiteUrl(): string {
+  const productionDomain = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  const candidates = [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    productionDomain ? `https://${productionDomain}` : undefined,
+    "http://localhost:3000",
+  ];
+
+  for (const candidate of candidates) {
+    const trimmed = candidate?.trim();
+    if (!trimmed) continue;
+    try {
+      // 絶対URL（スキーム付き）でないと metadataBase / sitemap がそのまま壊れる。
+      // 末尾の / は落とす——他で `${SITE_URL}/songs` のように連結しているため
+      return new URL(trimmed).toString().replace(/\/+$/, "");
+    } catch {
+      continue;
+    }
+  }
+  return "http://localhost:3000";
+}
+
+export const SITE_URL = resolveSiteUrl();
 
 export const site = {
   name: "arial",

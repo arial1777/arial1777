@@ -86,7 +86,11 @@ npm run typecheck  # tsc --noEmit
 ## デプロイ前に必ずやること
 
 `NEXT_PUBLIC_SITE_URL` に公開URLを設定する（`.env.example` 参照）。
-canonical・OGP・sitemap の生成元なので、未設定だと `http://localhost:3000` が埋め込まれる。
+canonical・OGP・sitemap の生成元。`https://` から書くこと。
+
+未設定・空・URLとして壊れている場合は、Vercel の本番ドメイン →
+`http://localhost:3000` の順にフォールバックする（`src/content/site.ts`）。
+ビルドは通るが canonical がプレビュー用のドメインになりうるので、結局は設定する。
 
 Vercel なら環境変数に入れるだけ。
 
