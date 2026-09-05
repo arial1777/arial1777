@@ -22,12 +22,18 @@ const media: Record<
 
 function WorkCard({ work, index }: { work: Work; index: number }) {
   const { logo, shot, shotAlt } = media[work.slug];
+  /*
+   * 1枚目はページを開いた時点で画面に入っている。ここを透明から始めると、
+   * このページで一番大きな絵の描画がそのぶん遅れる（LCP）ので出現させない。
+   * 遅らせる順番も、実際に出現する2枚目からの通し番号にする。
+   */
+  const revealed = index > 0;
 
   return (
     <article
       className={`work${shot ? " work--withShot" : ""}`}
-      data-reveal
-      style={{ "--i": index } as CSSProperties}
+      data-reveal={revealed || undefined}
+      style={{ "--i": Math.max(index - 1, 0) } as CSSProperties}
     >
       <div>
         <div className="work__head">
