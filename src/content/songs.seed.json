@@ -1,0 +1,142 @@
+{
+  "_comment": "保存先がまだ空のときに使う初期データ。管理画面で一度保存すると、以後はそちらが優先される（このファイルは読まれなくなる）。",
+  "artists": [
+    {
+      "name": "ELLEGARDEN",
+      "reading": "えるれがーでん",
+      "songs": [{ "title": "虹", "reading": "にじ" }]
+    },
+    {
+      "name": "あいみょん",
+      "reading": "あいみょん",
+      "songs": [
+        { "title": "桜が降る夜は", "reading": "さくらがふるよるは" },
+        { "title": "愛の花", "reading": "あいのはな" }
+      ]
+    },
+    {
+      "name": "秦基博",
+      "reading": "はたもとひろ",
+      "songs": [
+        { "title": "鱗", "reading": "うろこ" },
+        { "title": "Rain", "reading": "れいん" },
+        { "title": "虹が消えた日", "reading": "にじがきえたひ" },
+        { "title": "さよならくちびる", "reading": "さよならくちびる" },
+        { "title": "水無月", "reading": "みなづき" }
+      ]
+    },
+    {
+      "name": "back number",
+      "reading": "ばっくなんばー",
+      "songs": [
+        { "title": "水平線", "reading": "すいへいせん" },
+        { "title": "ハッピーエンド", "reading": "はっぴーえんど" },
+        { "title": "クリスマスソング", "reading": "くりすますそんぐ" },
+        { "title": "わたがし", "reading": "わたがし" }
+      ]
+    },
+    {
+      "name": "斉藤和義",
+      "reading": "さいとうかずよし",
+      "songs": [{ "title": "歌うたいのバラッド", "reading": "うたうたいのばらっど" }]
+    },
+    {
+      "name": "スピッツ",
+      "reading": "すぴっつ",
+      "songs": [
+        { "title": "春の歌", "reading": "はるのうた" },
+        { "title": "魔法のコトバ", "reading": "まほうのことば" }
+      ]
+    },
+    {
+      "name": "Ado",
+      "reading": "あど",
+      "songs": [
+        { "title": "向日葵", "reading": "ひまわり" },
+        { "title": "風のゆくえ", "reading": "かぜのゆくえ" }
+      ]
+    },
+    {
+      "name": "Saucy Dog",
+      "reading": "そーしーどっぐ",
+      "songs": [
+        { "title": "今更だって僕は言うかな", "reading": "いまさらだってぼくはいうかな" },
+        { "title": "結", "reading": "ゆい" }
+      ]
+    },
+    {
+      "name": "Vaundy",
+      "reading": "ばうんでぃ",
+      "songs": [
+        { "title": "怪獣の花唄", "reading": "かいじゅうのはなうた" },
+        { "title": "花占い", "reading": "はなうらない" },
+        { "title": "しわあわせ", "reading": "しわあわせ" }
+      ]
+    },
+    {
+      "name": "ヨルシカ",
+      "reading": "よるしか",
+      "songs": [
+        { "title": "晴る", "reading": "はる" },
+        { "title": "ノーチラス", "reading": "のーちらす" }
+      ]
+    },
+    {
+      "name": "いきものがかり",
+      "reading": "いきものがかり",
+      "songs": [{ "title": "歩いていこう", "reading": "あるいていこう" }]
+    },
+    {
+      "name": "コブクロ",
+      "reading": "こぶくろ",
+      "songs": [
+        { "title": "君という名の翼", "reading": "きみというなのつばさ" },
+        { "title": "桜", "reading": "さくら" }
+      ]
+    },
+    {
+      "name": "マカロニえんぴつ",
+      "reading": "まかろにえんぴつ",
+      "songs": [
+        { "title": "ブルーベリーナイツ", "reading": "ぶるーべりーないつ" },
+        { "title": "恋人ごっこ", "reading": "こいびとごっこ" },
+        { "title": "リンジュー・ラヴ", "reading": "りんじゅーらぶ" }
+      ]
+    },
+    {
+      "name": "クリープハイプ",
+      "reading": "くりーぷはいぷ",
+      "songs": [
+        { "title": "おやすみ泣き声、さよなら歌姫", "reading": "おやすみなきごえさよならうたひめ" },
+        { "title": "栞", "reading": "しおり" }
+      ]
+    },
+    {
+      "name": "YUI",
+      "reading": "ゆい",
+      "songs": [{ "title": "Good-bye days", "reading": "ぐっどばいでいず" }]
+    },
+    {
+      "name": "優里",
+      "reading": "ゆうり",
+      "songs": [
+        { "title": "ドライフラワー", "reading": "どらいふらわー" },
+        { "title": "メリーゴーランド", "reading": "めりーごーらんど" },
+        { "title": "ミズキリ", "reading": "みずきり" }
+      ]
+    },
+    {
+      "name": "andymori",
+      "reading": "あんでぃもーり",
+      "songs": [{ "title": "空は藍色", "reading": "そらはあいいろ" }]
+    },
+    {
+      "name": "星野源",
+      "reading": "ほしのげん",
+      "songs": [
+        { "title": "アイデア", "reading": "あいであ" },
+        { "title": "Crazy Crazy", "reading": "くれいじーくれいじー" }
+      ]
+    }
+  ]
+}

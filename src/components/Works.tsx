@@ -3,7 +3,7 @@ import Image, { type StaticImageData } from "next/image";
 import furatabiLogo from "@assets/works/furatabi-logo.png";
 import oshinomiLogo from "@assets/works/oshinomi-logo.png";
 import oshinomiShot from "@assets/works/oshinomi-lp.png";
-import { works, worksIntro, type Work } from "@/content/site";
+import { works, worksPage, type Work } from "@/content/site";
 import { SectionHead } from "@/components/SectionHead";
 
 /** プロダクトの画像。文言（site.ts）と切り離しておく。 */
@@ -29,10 +29,10 @@ function WorkCard({ work }: { work: Work }) {
           <span className="work__logo">
             <Image src={logo} alt="" width={44} height={44} />
           </span>
-          <h3 className="work__name">
+          <h2 className="work__name">
             {work.name}
             <span className="work__reading">{work.reading}</span>
-          </h3>
+          </h2>
           <span className="work__status">{work.status}</span>
         </div>
 
@@ -40,13 +40,13 @@ function WorkCard({ work }: { work: Work }) {
         <p className="work__body">{work.body}</p>
 
         <div className="work__block">
-          <h4 className="work__blockHead">なぜ作ったか</h4>
+          <h3 className="work__blockHead">なぜ作ったか</h3>
           <p className="work__blockBody">{work.why}</p>
         </div>
 
         {work.note ? (
           <div className="work__block work__block--accent">
-            <h4 className="work__blockHead">{work.note.heading}</h4>
+            <h3 className="work__blockHead">{work.note.heading}</h3>
             <p className="work__blockBody">{work.note.body}</p>
           </div>
         ) : null}
@@ -81,15 +81,17 @@ function WorkCard({ work }: { work: Work }) {
   );
 }
 
+/** /works ページの中身。個人開発でつくったものだけを並べる。 */
 export function Works() {
   return (
-    <section className="section section--alt" id="works" aria-labelledby="works-title">
+    <section className="section" id="works" aria-labelledby="works-title">
       <div className="container">
         <SectionHead
           id="works"
-          label="Works"
-          title="つくったもの"
-          intro={worksIntro}
+          level={1}
+          label={worksPage.label}
+          title={worksPage.title}
+          intro={worksPage.intro}
         />
 
         <div className="works">

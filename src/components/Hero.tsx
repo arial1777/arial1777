@@ -1,4 +1,5 @@
 import { getImageProps } from "next/image";
+import Link from "next/link";
 
 import bannerWide from "@assets/hero/hero-banner-wide.jpg";
 import bgTall from "@assets/hero/hero-bg-tall.jpg";
@@ -41,10 +42,10 @@ export function Hero() {
             ))}
           </ul>
 
-          <a className="hero__cta" href="#works">
+          <Link className="hero__cta" href="/works">
             つくったものを見る
             <span aria-hidden="true">→</span>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

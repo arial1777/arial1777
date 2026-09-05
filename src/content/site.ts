@@ -41,23 +41,39 @@ export const about = {
   ],
 } as const;
 
-export const activities = [
+export type Activity = {
+  index: string;
+  title: string;
+  body: string;
+  link?: { label: string; href: string };
+  /**
+   * カードの右肩に出す数。実数は中身を数えないと出ないので、
+   * ここでは「何を数えるか」だけを持ち、数えるのは表示側に任せる。
+   */
+  metric?: "songs" | "works";
+};
+
+export const activities: readonly Activity[] = [
   {
     index: "01",
     title: "弾き語り配信",
     body: "ギターと声だけの配信をしています。上手さより、その日の温度が乗ることを大事にしています。",
+    link: { label: "歌える曲を見る", href: "/songs" },
+    metric: "songs",
   },
   {
     index: "02",
     title: "個人開発",
-    body: "自分が困ったものを、自分で作って自分で使っています。相棒のろぼともその一つ。つくったものは下に並べています。",
+    body: "自分が困ったものを、自分で作って自分で使っています。相棒のろぼともその一つ。",
+    link: { label: "つくったものを見る", href: "/works" },
+    metric: "works",
   },
   {
     index: "03",
     title: "プロダクト企画（PdM）",
     body: "ITベンチャーで、何をつくるかを決める仕事をしています。仕様の話、意思決定の話が、他の二つにも効いています。",
   },
-] as const;
+];
 
 export type Work = {
   slug: string;
@@ -128,8 +144,15 @@ export const works: readonly Work[] = [
   },
 ];
 
-export const worksIntro =
-  "どちらも「AIに何をさせて、何をさせないか」を決めたプロダクトです。オシノミは読み取りをAIに任せて確認を人に返し、ふら旅は文章だけを書かせて事実は書かせない。偶然ではなく、判断の結果です。";
+/** /works ページの文言 */
+export const worksPage = {
+  label: "Works",
+  title: "つくったもの",
+  intro:
+    "どちらも「AIに何をさせて、何をさせないか」を決めたプロダクトです。オシノミは読み取りをAIに任せて確認を人に返し、ふら旅は文章だけを書かせて事実は書かせない。偶然ではなく、判断の結果です。",
+  description:
+    "arial がつくったものを置いています。推し活カレンダーの「オシノミ」と、AIが旅程をつくる「ふら旅」。",
+} as const;
 
 export const roboto = {
   heading: "ろぼと",
@@ -148,8 +171,13 @@ export const credits = {
   illustrator: null as string | null,
 };
 
+/**
+ * ヘッダーのナビ。トップの中の節へはアンカー、独立したページへはパスで指す。
+ * サブページからも押せるよう、アンカーは "/" から書く。
+ */
 export const nav = [
-  { label: "About", href: "#about" },
-  { label: "Works", href: "#works" },
-  { label: "ろぼと", href: "#roboto" },
+  { label: "About", href: "/#about" },
+  { label: "個人開発", href: "/works" },
+  { label: "歌える曲", href: "/songs" },
+  { label: "ろぼと", href: "/#roboto" },
 ] as const;

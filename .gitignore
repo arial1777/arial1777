@@ -5,3 +5,5 @@ next-env.d.ts
 *.tsbuildinfo
 .DS_Store
 .env*.local
+# 手元で動かしたときの曲データ。本番は Vercel Blob なので、これは持ち歩かない
+data/

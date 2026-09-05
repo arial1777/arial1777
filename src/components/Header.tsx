@@ -1,17 +1,19 @@
+import Link from "next/link";
+
 import { nav, site } from "@/content/site";
 
 export function Header() {
   return (
     <header className="header">
       <div className="container header__inner">
-        <a className="wordmark" href="#top">
+        <Link className="wordmark" href="/">
           {site.name}
-        </a>
+        </Link>
         <nav className="header__nav" aria-label="サイト内">
           {nav.map((item) => (
-            <a key={item.href} href={item.href}>
+            <Link key={item.href} href={item.href}>
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
       </div>
