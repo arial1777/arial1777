@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
 
 import { activities, works } from "@/content/site";
@@ -20,11 +21,16 @@ export function Activities({ songCount }: { songCount: number }) {
         <SectionHead id="activities" label="Activities" title="三つの活動" />
 
         <ul className="activities">
-          {activities.map((activity) => {
+          {activities.map((activity, index) => {
             const metric = metricText(activity.metric);
 
             return (
-              <li className="activity" key={activity.index}>
+              <li
+                className="activity"
+                key={activity.index}
+                data-reveal
+                style={{ "--i": index } as CSSProperties}
+              >
                 <p className="activity__index">{activity.index}</p>
                 <h3 className="activity__title">
                   {activity.title}

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Image from "next/image";
 
 import bust from "@assets/characters/arial-bust-framed.jpg";
@@ -11,7 +12,7 @@ export function About() {
         <SectionHead id="about" label="About" title="つくることと、うたうこと。" />
 
         <div className="about">
-          <div className="about__art">
+          <div className="about__art" data-reveal>
             <Image
               src={bust}
               alt="arial のバストアップ。水の輪と音符に囲まれている"
@@ -21,12 +22,20 @@ export function About() {
           </div>
 
           <div className="about__text">
-            <p className="about__lead">{about.lead}</p>
-            {about.paragraphs.map((paragraph) => (
-              <p key={paragraph.slice(0, 12)}>{paragraph}</p>
+            <p className="about__lead" data-reveal>
+              {about.lead}
+            </p>
+            {about.paragraphs.map((paragraph, index) => (
+              <p
+                key={paragraph.slice(0, 12)}
+                data-reveal
+                style={{ "--i": index + 1 } as CSSProperties}
+              >
+                {paragraph}
+              </p>
             ))}
 
-            <dl className="profile">
+            <dl className="profile" data-reveal>
               {about.profile.map((row) => (
                 <div key={row.label} style={{ display: "contents" }}>
                   <dt>{row.label}</dt>

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Image, { type StaticImageData } from "next/image";
 
 import furatabiLogo from "@assets/works/furatabi-logo.png";
@@ -19,11 +20,15 @@ const media: Record<
   furatabi: { logo: furatabiLogo },
 };
 
-function WorkCard({ work }: { work: Work }) {
+function WorkCard({ work, index }: { work: Work; index: number }) {
   const { logo, shot, shotAlt } = media[work.slug];
 
   return (
-    <article className={`work${shot ? " work--withShot" : ""}`}>
+    <article
+      className={`work${shot ? " work--withShot" : ""}`}
+      data-reveal
+      style={{ "--i": index } as CSSProperties}
+    >
       <div>
         <div className="work__head">
           <span className="work__logo">
@@ -95,8 +100,8 @@ export function Works() {
         />
 
         <div className="works">
-          {works.map((work) => (
-            <WorkCard key={work.slug} work={work} />
+          {works.map((work, index) => (
+            <WorkCard key={work.slug} work={work} index={index} />
           ))}
         </div>
       </div>

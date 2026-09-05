@@ -11,7 +11,7 @@ export function Roboto() {
       <div className="container">
         <SectionHead id="roboto" label="Partner" title="相棒のこと" />
 
-        <div className="roboto">
+        <div className="roboto" data-reveal>
           <div className="roboto__figure">
             <Image
               className="roboto__chibi"
@@ -27,7 +27,10 @@ export function Roboto() {
               width={128}
               height={157}
             />
-            <p className="roboto__bubble">{roboto.speech}</p>
+            {/* 吹き出しだけ少し遅れて、ぽんと出る */}
+            <p className="roboto__bubble" data-reveal>
+              {roboto.speech}
+            </p>
           </div>
 
           <div className="roboto__text">

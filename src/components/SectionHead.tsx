@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 export function SectionHead({
   label,
   title,
@@ -19,11 +21,23 @@ export function SectionHead({
 
   return (
     <div className="section__head">
-      <p className="section__label">{label}</p>
-      <Heading className="section__title" id={`${id}-title`}>
+      {/* 上から順に、少しずつ遅らせて出す。--i がその順番 */}
+      <p className="section__label" data-reveal style={{ "--i": 0 } as CSSProperties}>
+        {label}
+      </p>
+      <Heading
+        className="section__title"
+        id={`${id}-title`}
+        data-reveal
+        style={{ "--i": 1 } as CSSProperties}
+      >
         {title}
       </Heading>
-      {intro ? <p className="section__intro">{intro}</p> : null}
+      {intro ? (
+        <p className="section__intro" data-reveal style={{ "--i": 2 } as CSSProperties}>
+          {intro}
+        </p>
+      ) : null}
     </div>
   );
 }

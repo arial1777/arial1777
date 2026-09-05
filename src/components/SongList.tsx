@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { type CSSProperties, useMemo, useState } from "react";
 
 import type { Artist } from "@/content/songs";
 import { songsPage } from "@/content/songs";
@@ -68,8 +68,13 @@ export function SongList({ artists }: { artists: readonly Artist[] }) {
         </p>
       ) : (
         <div className="songs">
-          {filtered.map((artist) => (
-            <section className="songGroup" key={artist.name}>
+          {filtered.map((artist, index) => (
+            // しぼりこみで並びが入れ替わるたびに出し直すので、遅れは頭の数件だけに留める
+            <section
+              className="songGroup"
+              key={artist.name}
+              style={{ "--i": Math.min(index, 8) } as CSSProperties}
+            >
               <h2 className="songGroup__name">
                 {artist.name}
                 <span className="songGroup__count">{artist.songs.length}曲</span>

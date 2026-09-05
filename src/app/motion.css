@@ -1,0 +1,959 @@
+/* ============================================================
+   arial — motion layer
+   globals.css の後に読み込む。「見た目」は向こう、「動き」はこちら。
+
+   方針
+   - 動きは水と音のモチーフに寄せる。波紋・ゆらぎ・立ちのぼる泡。
+   - 出現前の状態（透明・少し下）を作るのは html[data-js="on"] のときだけ。
+     JS が動かない環境では中身が最初から見えていてほしいため。
+   - hover で動かす要素の入場は animation-fill-mode: backwards にする。
+     both だと最後のキーフレームが居座って、hover の transform が効かなくなる。
+   - 最後に prefers-reduced-motion でまとめて畳む。
+   ============================================================ */
+
+:root {
+  /* 幕が明けて、ヒーローが動き出すまでの間。各所がこれを基点に遅れる */
+  --intro-hold: 1.45s;
+  /* 減速がきつめのイージング。水が落ち着くような止まり方をする */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* 幕を飛ばしたとき（2回目以降・触られたとき）は誰も待たない */
+html[data-intro="skip"] {
+  --intro-hold: 0s;
+}
+
+/* ---------------- 共通のキーフレーム ---------------- */
+
+@keyframes m-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes m-rise-in {
+  from {
+    opacity: 0;
+    /* 窓に付けた上下の逃がしより深く沈めないと、頭が見えてしまう */
+    transform: translateY(130%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes m-sweep {
+  to {
+    transform: translateX(130%);
+  }
+}
+
+/* ---------------- 幕（初回のアニメーション） ---------------- */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  /* 幕の裏を押してしまわないよう、当たり判定は最初から持たせない */
+  pointer-events: none;
+  background: radial-gradient(120% 88% at 50% 46%, #12275c 0%, #0a1740 44%, #050c22 100%);
+  animation: m-intro-out 620ms var(--ease-soft) 1180ms both;
+}
+
+html[data-intro="skip"] .intro {
+  display: none;
+}
+
+/* 水面がふっと散って、下のヒーローに変わる */
+@keyframes m-intro-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.05);
+    filter: blur(8px);
+    visibility: hidden;
+  }
+}
+
+.intro__water {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* 一滴の落ちた跡。三重の輪が少しずつ遅れて広がる */
+.intro__ring {
+  position: absolute;
+  width: min(40vmin, 300px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--roboto-body) 55%, transparent);
+  opacity: 0;
+  animation: m-intro-ring 1.9s var(--ease-soft) both;
+}
+
+.intro__ring:nth-child(2) {
+  animation-delay: 0.22s;
+}
+
+.intro__ring:nth-child(3) {
+  animation-delay: 0.44s;
+  border-color: color-mix(in srgb, var(--blue-500) 55%, transparent);
+}
+
+@keyframes m-intro-ring {
+  0% {
+    transform: scale(0.18);
+    opacity: 0;
+  }
+  16% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(3.4);
+    opacity: 0;
+  }
+}
+
+.intro__inner {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.intro__mark {
+  display: flex;
+  gap: 0.06em;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 12vw, 5rem);
+  font-weight: 300;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  color: var(--white);
+}
+
+/* 一文字ずつ、水の底から浮かび上がるように */
+.intro__mark span {
+  display: block;
+  animation: m-intro-letter 720ms var(--ease-soft) calc(0.16s + var(--i) * 0.07s) both;
+}
+
+@keyframes m-intro-letter {
+  from {
+    opacity: 0;
+    transform: translateY(0.42em) scale(0.94);
+    filter: blur(7px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+.intro__rule {
+  display: block;
+  width: min(44vmin, 240px);
+  height: 1px;
+  margin-top: 1.1rem;
+  background: linear-gradient(90deg, transparent, var(--blue-500), transparent);
+  animation: m-intro-rule 620ms var(--ease-soft) 0.72s both;
+}
+
+@keyframes m-intro-rule {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+.intro__sub {
+  margin-top: 0.7rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.34em;
+  /* letter-spacing のぶん右に寄るので、その量を戻して中央に見せる */
+  text-indent: 0.34em;
+  color: var(--text-muted);
+  animation: m-fade-up 600ms var(--ease-soft) 0.88s both;
+}
+
+/* ---------------- ヘッダー ---------------- */
+
+.header {
+  animation: m-header-in 700ms var(--ease-soft) max(0s, calc(var(--intro-hold) - 0.2s))
+    backwards;
+  transition:
+    background-color 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+@keyframes m-header-in {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.header__inner {
+  transition: height 0.35s var(--ease-soft);
+}
+
+/* 少しでもスクロールしたら、帯を濃くして丈を詰める */
+html[data-scrolled="1"] .header {
+  background: color-mix(in srgb, var(--navy-900) 94%, transparent);
+  border-bottom-color: var(--border);
+  box-shadow: 0 12px 32px -24px rgba(0, 0, 0, 0.95);
+}
+
+html[data-scrolled="1"] .header__inner {
+  height: 3.4rem;
+}
+
+/* ワードマークを、たまに光が横切る。背景で文字を切り抜くので対応を確かめてから */
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .wordmark {
+    background: linear-gradient(
+      100deg,
+      var(--white) 0%,
+      var(--white) 38%,
+      var(--roboto-body) 50%,
+      var(--white) 62%,
+      var(--white) 100%
+    );
+    background-size: 260% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: m-sheen 9s ease-in-out calc(var(--intro-hold) + 1.2s) infinite;
+  }
+}
+
+@keyframes m-sheen {
+  0%,
+  62% {
+    background-position: 130% 0;
+  }
+  100% {
+    background-position: -30% 0;
+  }
+}
+
+/* ナビの下線は、右へ消えて左から引かれる */
+.header__nav a {
+  position: relative;
+  padding-block: 0.25rem;
+  transition: color 0.3s ease;
+}
+
+.header__nav a::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--roboto-body);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s var(--ease-soft);
+}
+
+.header__nav a:hover::after,
+.header__nav a:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ---------------- ヒーロー ---------------- */
+
+/* 中で mix-blend-mode を使うので、混ざる範囲をヒーローの中だけに閉じる */
+.hero {
+  isolation: isolate;
+}
+
+/* 幕が明けたところから絵がゆっくり引いて、そのまま息をするように漂う */
+.hero__mediaImg {
+  animation:
+    m-hero-reveal 1.8s var(--ease-soft) var(--intro-hold) backwards,
+    m-hero-float 30s ease-in-out calc(var(--intro-hold) + 1.8s) infinite alternate;
+}
+
+@keyframes m-hero-reveal {
+  from {
+    opacity: 0.55;
+    transform: scale(1.08);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* object-fit: cover の絵なので、拡大方向にだけ動かす（縮めると縁が空く） */
+@keyframes m-hero-float {
+  from {
+    transform: scale(1) translateY(0);
+  }
+  to {
+    transform: scale(1.05) translateY(-1.2%);
+  }
+}
+
+/* 水面の細かな揺らぎ。下の節と同じタイルを、薄く流す */
+.hero__caustics {
+  position: absolute;
+  inset: -180px;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("../../assets/textures/water-tile.webp");
+  background-size: 256px 256px;
+  opacity: 0.14;
+  mix-blend-mode: screen;
+  animation: m-tile-drift 42s linear infinite;
+}
+
+/* タイルの一辺ぶんちょうど動かすと、継ぎ目なく繰り返せる */
+@keyframes m-tile-drift {
+  to {
+    transform: translate3d(256px, -256px, 0);
+  }
+}
+
+/* 遠くの光。青と水色の玉が、別々の速さで行き来する */
+.hero__aurora {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero__aurora::before,
+.hero__aurora::after {
+  content: "";
+  position: absolute;
+  width: 46vmax;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  filter: blur(60px);
+}
+
+.hero__aurora::before {
+  left: -14vmax;
+  top: -18vmax;
+  opacity: 0.3;
+  background: radial-gradient(circle, var(--blue-500), transparent 62%);
+  animation: m-aurora-a 26s ease-in-out infinite alternate;
+}
+
+.hero__aurora::after {
+  right: -18vmax;
+  bottom: -22vmax;
+  opacity: 0.2;
+  background: radial-gradient(circle, var(--roboto-body), transparent 60%);
+  animation: m-aurora-b 34s ease-in-out infinite alternate;
+}
+
+@keyframes m-aurora-a {
+  to {
+    transform: translate3d(14vmax, 8vmax, 0) scale(1.15);
+  }
+}
+
+@keyframes m-aurora-b {
+  to {
+    transform: translate3d(-12vmax, -9vmax, 0) scale(1.2);
+  }
+}
+
+/* ポインタを追う光。指で触る端末には出さない（触った場所に残ってしまうため） */
+.hero__glow {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 40%),
+    rgba(90, 185, 255, 0.17),
+    transparent 70%
+  );
+  transition: opacity 0.45s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero:hover .hero__glow {
+    opacity: 1;
+  }
+}
+
+/* 立ちのぼる泡 */
+.hero__bubbles {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero__bubbles li {
+  position: absolute;
+  bottom: -6%;
+  left: var(--x);
+  width: var(--size);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid rgba(146, 208, 255, 0.26);
+  background: radial-gradient(
+    circle at 32% 28%,
+    rgba(255, 255, 255, 0.5),
+    rgba(90, 180, 255, 0.16) 56%,
+    rgba(90, 180, 255, 0) 74%
+  );
+  opacity: 0;
+  animation: m-bubble var(--d) linear calc(var(--intro-hold) + var(--delay)) infinite;
+}
+
+@keyframes m-bubble {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.65);
+    opacity: 0;
+  }
+  14% {
+    opacity: 0.5;
+  }
+  72% {
+    opacity: 0.34;
+  }
+  100% {
+    transform: translate3d(var(--drift), -96vh, 0) scale(1.05);
+    opacity: 0;
+  }
+}
+
+/* 見出しは窓（外側）で切って、紙（内側）を下から引き上げる */
+.hero__title .hero__titleLine {
+  display: block;
+  overflow: hidden;
+  /*
+   * 文字の光（text-shadow）を窓が切り落とさないための逃がし。
+   * 左右に広げると狭い画面で余白からはみ出すので、上下だけにする。
+   */
+  padding-block: 0.14em;
+  margin-block: -0.14em;
+}
+
+.hero__title .hero__titleInner {
+  display: inline-block;
+  animation: m-rise-in 950ms var(--ease-soft) calc(var(--intro-hold) + var(--i) * 0.13s)
+    backwards;
+}
+
+.hero__sub {
+  animation: m-fade-up 800ms var(--ease-soft) calc(var(--intro-hold) + 0.34s) backwards;
+}
+
+.hero__roles li {
+  animation: m-fade-up 700ms var(--ease-soft)
+    calc(var(--intro-hold) + 0.5s + var(--i) * 0.09s) backwards;
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s var(--ease-soft);
+}
+
+.hero__roles li:hover {
+  border-color: var(--blue-500);
+  color: var(--text);
+  transform: translateY(-2px);
+}
+
+.hero__cta {
+  position: relative;
+  overflow: hidden;
+  animation: m-fade-up 800ms var(--ease-soft) calc(var(--intro-hold) + 0.78s) backwards;
+  transition:
+    transform 0.35s var(--ease-soft),
+    box-shadow 0.35s ease,
+    filter 0.35s ease;
+}
+
+/* 押す前に、光が一度だけ横切る */
+.hero__cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 32%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 68%
+  );
+  transform: translateX(-130%);
+}
+
+.hero__cta > span {
+  position: relative;
+  z-index: 1;
+}
+
+.hero__cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px -16px rgba(16, 66, 190, 1);
+}
+
+.hero__cta:hover::before {
+  animation: m-sweep 900ms ease;
+}
+
+.hero__cta > span:last-child {
+  transition: transform 0.3s var(--ease-soft);
+}
+
+.hero__cta:hover > span:last-child {
+  transform: translateX(5px);
+}
+
+/* 下へ、の合図。線の中を光が落ちていく */
+.hero__scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  z-index: 4;
+  translate: -50% 0;
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text-muted);
+  animation: m-fade-up 800ms var(--ease-soft) calc(var(--intro-hold) + 1s) backwards;
+  transition: color 0.3s ease;
+}
+
+.hero__scroll:hover {
+  color: var(--text);
+}
+
+.hero__scrollLine {
+  position: relative;
+  width: 1px;
+  height: 42px;
+  overflow: hidden;
+  background: linear-gradient(180deg, transparent, var(--border));
+}
+
+.hero__scrollLine::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: -14px;
+  height: 14px;
+  background: linear-gradient(180deg, transparent, var(--roboto-body));
+  animation: m-scroll-dot 2.4s var(--ease-inout) infinite;
+}
+
+@keyframes m-scroll-dot {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(56px);
+    opacity: 0;
+  }
+}
+
+/* 画面が低いと本文と重なるので、そのときは出さない */
+@media (max-height: 620px) {
+  .hero__scroll {
+    display: none;
+  }
+}
+
+/* ---------------- スクロールで出す（共通） ---------------- */
+
+/*
+ * 出現前の状態を作るのは JS が動いているときだけ。
+ * MotionRuntime が画面に入った要素へ data-revealed を付けて、ここが解ける。
+ */
+html[data-js="on"] [data-reveal] {
+  opacity: 0;
+  transform: translateY(var(--reveal-y, 18px)) scale(var(--reveal-s, 1));
+  filter: blur(var(--reveal-blur, 4px));
+  transition:
+    opacity 0.8s var(--ease-soft) calc(var(--i, 0) * 90ms),
+    transform 0.9s var(--ease-soft) calc(var(--i, 0) * 90ms),
+    filter 0.9s var(--ease-soft) calc(var(--i, 0) * 90ms);
+}
+
+/* blur(0) のままだと合成レイヤーが残り続けるので、none まで戻す */
+html[data-js="on"] [data-reveal][data-revealed] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* ---------------- 節の見出し ---------------- */
+
+/* ラベルの右へ伸びる線は、出るときに引かれる */
+.section__label::after {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1s var(--ease-soft) 0.15s;
+}
+
+.section__label[data-revealed]::after,
+html:not([data-js="on"]) .section__label::after {
+  transform: scaleX(1);
+}
+
+/* ---------------- about ---------------- */
+
+.about__art {
+  --reveal-y: 26px;
+  position: relative;
+}
+
+.about__art img {
+  transition: transform 1.2s var(--ease-soft);
+}
+
+.about__art:hover img {
+  transform: scale(1.04);
+}
+
+/* 額の上を、水の反射がゆっくり通る。通り過ぎたら長く休ませる */
+.about__art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    118deg,
+    transparent 42%,
+    rgba(146, 208, 255, 0.2) 50%,
+    transparent 58%
+  );
+  transform: translateX(-130%);
+  animation: m-sweep 11s var(--ease-inout) 3s infinite;
+}
+
+/* 水面のタイルを、下の節でも流す */
+.section--alt {
+  overflow: hidden;
+}
+
+.section--alt::before {
+  inset: -256px;
+  animation: m-tile-drift 60s linear infinite;
+}
+
+/* ---------------- activities ---------------- */
+
+.activity {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.45s var(--ease-soft),
+    border-color 0.45s ease;
+}
+
+.activity::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    340px circle at 50% 0%,
+    rgba(52, 136, 221, 0.18),
+    transparent 70%
+  );
+  transition: opacity 0.45s ease;
+}
+
+.activity:hover {
+  transform: translateY(-6px);
+  border-color: var(--blue-600);
+}
+
+.activity:hover::after {
+  opacity: 1;
+}
+
+/* 上の ::after は positioned なので、中身を明示的にその上へ持ち上げる */
+.activity > * {
+  position: relative;
+  z-index: 1;
+}
+
+.activity__index {
+  transition:
+    color 0.4s ease,
+    letter-spacing 0.4s var(--ease-soft);
+}
+
+.activity:hover .activity__index {
+  color: var(--roboto-body);
+  letter-spacing: 0.3em;
+}
+
+.activity__link a span,
+.work__links a span {
+  display: inline-block;
+  transition: transform 0.3s var(--ease-soft);
+}
+
+.activity__link a:hover span,
+.work__links a:hover span {
+  transform: translateX(4px);
+}
+
+/* ---------------- works ---------------- */
+
+.work {
+  --reveal-y: 26px;
+  transition:
+    transform 0.5s var(--ease-soft),
+    border-color 0.5s ease,
+    box-shadow 0.5s ease;
+}
+
+.work:hover {
+  transform: translateY(-4px);
+  border-color: var(--blue-600);
+  box-shadow: 0 34px 64px -44px rgba(0, 0, 0, 0.95);
+}
+
+.work__logo,
+.work__shot {
+  transition: transform 0.6s var(--ease-soft);
+}
+
+.work:hover .work__logo {
+  transform: rotate(-6deg) scale(1.06);
+}
+
+.work:hover .work__shot {
+  transform: translateY(-6px) rotate(-1.2deg);
+}
+
+.work__stack li {
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.work__stack li:hover {
+  border-color: var(--blue-600);
+  color: var(--text);
+}
+
+/* ---------------- roboto ---------------- */
+
+.roboto {
+  transition: border-color 0.5s ease;
+}
+
+.roboto:hover {
+  border-color: var(--blue-600);
+}
+
+/* 二人とも、少しずれた周期で浮いている */
+.roboto__mascot {
+  animation: m-bob 4.2s var(--ease-inout) infinite;
+}
+
+.roboto__chibi {
+  animation: m-bob 5.4s var(--ease-inout) 0.7s infinite;
+}
+
+@keyframes m-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* 吹き出しは、しっぽの根本から膨らむ */
+.roboto__bubble {
+  --reveal-y: 6px;
+  --reveal-s: 0.7;
+  --reveal-blur: 0px;
+  transform-origin: 14% 116%;
+}
+
+/*
+ * 出きってから、ゆっくり浮かせる。遅らせているあいだは animation が
+ * 何も塗らないので、上の transition がそのまま最後まで走れる。
+ */
+.roboto__bubble[data-revealed] {
+  animation: m-bob 3.8s var(--ease-inout) 1.2s infinite;
+}
+
+/* ---------------- songs ---------------- */
+
+/*
+ * しぼりこみで並びが入れ替わるところなので、スクロール監視ではなく
+ * 「生まれたときに一度」で出す。React が要素を作り直したぶんだけ動く。
+ */
+.songGroup {
+  animation: m-fade-up 700ms var(--ease-soft) calc(var(--i, 0) * 60ms) backwards;
+}
+
+.song {
+  transition: transform 0.3s var(--ease-soft);
+}
+
+.song:hover {
+  transform: translateX(5px);
+}
+
+.song__key {
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.song:hover .song__key {
+  border-color: var(--blue-600);
+  color: var(--text);
+}
+
+.songSearch__input {
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.songSearch__input:focus-visible {
+  box-shadow: 0 0 0 4px rgba(52, 136, 221, 0.16);
+}
+
+/* ---------------- footer ---------------- */
+
+.footer {
+  position: relative;
+}
+
+/* 水がゆっくり流れていく線 */
+.footer::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  inset-inline: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--blue-600),
+    var(--roboto-body),
+    var(--blue-600),
+    transparent
+  );
+  background-size: 45% 100%;
+  background-repeat: no-repeat;
+  animation: m-flow 11s linear infinite;
+}
+
+@keyframes m-flow {
+  from {
+    background-position: -45% 0;
+  }
+  to {
+    background-position: 145% 0;
+  }
+}
+
+/* ---------------- ページを移ったとき ---------------- */
+
+/* MotionRuntime が付け直す。中身の入れ替わりをひと呼吸で見せる */
+#main[data-nav="in"] {
+  animation: m-page-in 520ms var(--ease-soft) backwards;
+}
+
+@keyframes m-page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------------- 動きを減らす設定のとき ---------------- */
+
+/*
+ * 「止める」ではなく「一瞬で終わらせる」。0 にすると、animation で
+ * 位置や透明度を決めている要素が出発点のまま残って読めなくなる。
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .intro {
+    display: none;
+  }
+
+  html[data-js="on"] [data-reveal] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .hero__bubbles,
+  .hero__glow,
+  .hero__scrollLine::after {
+    display: none;
+  }
+}
