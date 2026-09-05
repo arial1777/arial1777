@@ -9,12 +9,10 @@ export function Footer() {
         <p>
           © {year} {site.name}
         </p>
-        <p className="footer__note">
-          {credits.illustrator ? (
-            <>イラスト: {credits.illustrator}　/　</>
-          ) : null}
-          Built with Next.js
-        </p>
+        {/* クレジットが無いあいだは、右側には何も出さない */}
+        {credits.illustrator ? (
+          <p className="footer__note">イラスト: {credits.illustrator}</p>
+        ) : null}
       </div>
     </footer>
   );
