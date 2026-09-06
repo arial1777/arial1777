@@ -251,5 +251,4 @@ export const nav = [
   { label: "About", href: "/#about" },
   { label: "個人開発", href: "/works" },
   { label: "歌える曲", href: "/songs" },
-  { label: "ろぼと", href: "/#roboto" },
 ] as const;
