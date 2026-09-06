@@ -157,6 +157,54 @@ a:hover {
   color: var(--text);
 }
 
+/*
+ * ナビが4項目になると、狭い画面ではロゴと取り合いになる。
+ * ヘッダーの高さは 4rem 固定なので、項目の中で文字が折り返すと崩れる。
+ * まず折り返しを禁じ、そのうえで字と間隔を詰めていく。
+ */
+.header__nav a {
+  white-space: nowrap;
+}
+
+@media (max-width: 400px) {
+  .wordmark {
+    font-size: 1.2rem;
+    letter-spacing: 0.12em;
+  }
+
+  .header__nav {
+    gap: 0.72rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+  }
+}
+
+@media (max-width: 345px) {
+  .wordmark {
+    font-size: 1.05rem;
+  }
+
+  .header__nav {
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0;
+  }
+}
+
+/*
+ * それでも入らない幅（280px級）のときの最後の逃げ道。
+ * はみ出して切れるより、横に送れるほうがまだ辿り着ける。
+ */
+.header__nav {
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.header__nav::-webkit-scrollbar {
+  display: none;
+}
+
 /* ---------------- hero ---------------- */
 
 .hero {
