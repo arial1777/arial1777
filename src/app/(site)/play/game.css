@@ -1,0 +1,237 @@
+/* ============================================================
+   ろぼとダイブ（/play）だけのスタイル。
+   このページからしか読まないので、他のページの重さには効かない。
+   （管理画面の admin.css と同じ扱い）
+   ============================================================ */
+
+/*
+ * 遊ぶところは、スクロールせずに全部見えていないと話にならない。
+ * 節の上の余白だけ、ふだんより詰める。
+ */
+#play {
+  padding-top: clamp(1.75rem, 4vw, 3rem);
+}
+
+.dive {
+  margin-top: clamp(1.2rem, 3vw, 2rem);
+}
+
+/* ---- 数字。canvas の外に出してあるので、拡大しても潰れない ---- */
+
+.dive__hud {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.7rem;
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+}
+
+.dive__stat {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text);
+  /* 桁が増えても左右に揺れない */
+  font-variant-numeric: tabular-nums;
+}
+
+.dive__stat--notes {
+  color: var(--roboto-body);
+}
+
+.dive__stat--best {
+  margin-left: auto;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+/* ---- 遊ぶところ ---- */
+
+/*
+ * スマホでは画面いっぱいに広げる。container の左右の余白ぶんを
+ * 打ち消して、指で触れる面積をできるだけ大きく取る。
+ */
+.dive__box {
+  position: relative;
+  margin-inline: -1.25rem;
+  height: 60vh;
+  height: min(60dvh, 510px);
+  min-height: 320px;
+  background: #060d24;
+  overflow: hidden;
+  /* これが無いと、タップのたびにページが動いたり拡大したりする */
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.dive__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+/* ---- かぶせるもの（開始・結果） ---- */
+
+.dive__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  padding: 1.5rem;
+  text-align: center;
+  background: linear-gradient(
+    180deg,
+    rgba(6, 13, 36, 0.55),
+    rgba(6, 13, 36, 0.88)
+  );
+}
+
+.dive__poster {
+  width: 112px;
+  height: auto;
+}
+
+.dive__lead {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.dive__hint,
+.dive__note {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+
+.dive__resultHead {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--blue-500);
+}
+
+.dive__result {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * 押しやすさを優先して大きめに取る。指で触る前提なので、
+ * 高さは 48px を下回らせない。
+ */
+.dive__button {
+  min-height: 48px;
+  padding: 0.7rem 2rem;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--blue-700), #1d6fc0);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition:
+    transform 0.2s var(--ease-soft, ease),
+    filter 0.2s ease;
+}
+
+.dive__button:hover {
+  filter: brightness(1.12);
+}
+
+.dive__button:active {
+  transform: translateY(1px);
+}
+
+.dive__button[disabled] {
+  opacity: 0.65;
+  cursor: default;
+}
+
+/* ---- 遊びかた ---- */
+
+.dive__noscript {
+  margin-top: 1.2rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+}
+
+.dive__rules {
+  margin-top: clamp(1.5rem, 4vw, 2.4rem);
+  max-width: 40rem;
+}
+
+.dive__rulesHead {
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.dive__rulesHead::before {
+  content: "";
+  display: inline-block;
+  width: 1.6rem;
+  height: 1px;
+  margin-right: 0.7rem;
+  vertical-align: middle;
+  background: var(--blue-500);
+}
+
+.dive__rules ul {
+  margin: 1rem 0 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.94rem;
+}
+
+.dive__note {
+  margin-top: 1rem;
+}
+
+/* ---- 画面が広いとき ---- */
+
+@media (min-width: 700px) {
+  .dive {
+    max-width: 880px;
+  }
+
+  .dive__box {
+    margin-inline: 0;
+    height: min(58dvh, 500px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .dive__poster {
+    width: 128px;
+  }
+}
+
+/*
+ * 動きを減らす設定のとき。ゲーム本体は本人が始めたものなので止めないが、
+ * ボタンの動きだけは畳む（泡は dive.ts 側で出さなくなる）。
+ */
+@media (prefers-reduced-motion: reduce) {
+  .dive__button {
+    transition: none;
+  }
+
+  .dive__button:active {
+    transform: none;
+  }
+}

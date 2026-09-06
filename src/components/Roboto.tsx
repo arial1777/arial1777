@@ -1,8 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import chibi from "@assets/characters/chibi/arial-chibi-2.png";
 import mascot from "@assets/roboto/roboto.png";
-import { roboto } from "@/content/site";
+import { playPage, roboto } from "@/content/site";
 import { SectionHead } from "@/components/SectionHead";
 
 export function Roboto() {
@@ -38,6 +39,14 @@ export function Roboto() {
             {roboto.body.map((paragraph) => (
               <p key={paragraph.slice(0, 12)}>{paragraph}</p>
             ))}
+
+            {/* ゲームの入口はここだけ。ナビには出していない */}
+            <p className="roboto__play">
+              <Link href="/play">
+                {playPage.title}であそぶ
+                <span aria-hidden="true">→</span>
+              </Link>
+            </p>
           </div>
         </div>
       </div>

@@ -887,6 +887,23 @@ h3,
   font-size: 0.9rem;
 }
 
+/* ろぼとの節から /play への導線。活動カードのリンクと同じ見た目に揃える */
+.roboto__play {
+  margin-top: 1.4rem;
+  font-size: 0.94rem;
+}
+
+.roboto__play a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-decoration: none;
+}
+
+.roboto__play a:hover {
+  text-decoration: underline;
+}
+
 .activity__link a {
   display: inline-flex;
   align-items: center;
