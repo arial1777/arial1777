@@ -7,3 +7,6 @@ next-env.d.ts
 .env*.local
 # 手元で動かしたときの曲データ。本番は Vercel Blob なので、これは持ち歩かない
 data/
+
+# Vercel CLI が作るローカルの紐づけ情報
+.vercel
