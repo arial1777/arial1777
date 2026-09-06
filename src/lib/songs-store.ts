@@ -17,6 +17,14 @@ import seed from "@/content/songs.seed.json";
  */
 
 const BLOB_PATHNAME = "songs/songs.json";
+/**
+ * ストアの access 設定と揃える必要がある。食い違うと Blob 側が
+ * "Cannot use public access on a private store" のように蹴ってくる。
+ *
+ * この JSON はサーバー側でしか読まない（公開ページは読んだ結果をHTMLに焼いて出す）ので、
+ * URL を知られても中身が取れない private でよい。公開ストアに差し替えたときだけ "public" に。
+ */
+const BLOB_ACCESS = "private" as const;
 const LOCAL_PATH = path.join(process.cwd(), "data", "songs.json");
 
 function usesBlob(): boolean {
@@ -32,7 +40,7 @@ async function readRaw(): Promise<string | null> {
   if (usesBlob()) {
     // useCache: false で CDN を通さず origin から読む。保存直後に古い内容が
     // 返ってくると、管理画面で「保存したのに戻っている」ように見えるため。
-    const result = await get(BLOB_PATHNAME, { access: "public", useCache: false });
+    const result = await get(BLOB_PATHNAME, { access: BLOB_ACCESS, useCache: false });
     if (!result || result.statusCode !== 200) return null;
     return await new Response(result.stream).text();
   }
@@ -48,7 +56,7 @@ async function readRaw(): Promise<string | null> {
 async function writeRaw(body: string): Promise<void> {
   if (usesBlob()) {
     await put(BLOB_PATHNAME, body, {
-      access: "public",
+      access: BLOB_ACCESS,
       contentType: "application/json",
       addRandomSuffix: false,
       allowOverwrite: true,

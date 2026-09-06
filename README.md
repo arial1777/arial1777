@@ -100,7 +100,9 @@ Vercel なら環境変数に入れるだけ。
 2. Vercel のダッシュボードで **Blob ストアを作ってプロジェクトに接続する** —
    `BLOB_READ_WRITE_TOKEN` が自動で入り、曲データの保存先がここになる。
    接続しないまま公開すると、保存のたびに「保存できませんでした」が出る
-   （サーバーレスではディスクに書けないため）
+   （サーバーレスではディスクに書けないため）。
+   ストアは **private access** で作る。`songs-store.ts` の `BLOB_ACCESS` がそれに揃えてあり、
+   食い違うと保存時に `Cannot use public access on a private store` で蹴られる
 
 静的ホスティング（GitHub Pages など）には、この構成では出せない。管理画面と保存が
 サーバーを必要とするため。どうしても出す場合は `next.config.ts` のコメントにある
