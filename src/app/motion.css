@@ -787,6 +787,64 @@ html:not([data-js="on"]) .section__label::after {
   color: var(--text);
 }
 
+/* ---------------- character（立ち絵） ---------------- */
+
+.character__art {
+  --reveal-y: 26px;
+  position: relative;
+}
+
+.character__art img {
+  transition: transform 1.2s var(--ease-soft);
+}
+
+.character__art:hover img {
+  transform: scale(1.03);
+}
+
+/* About の額と同じ反射。位相をずらして、二つが同時に光らないようにする */
+.character__art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    118deg,
+    transparent 42%,
+    rgba(146, 208, 255, 0.2) 50%,
+    transparent 58%
+  );
+  transform: translateX(-130%);
+  animation: m-sweep 11s var(--ease-inout) 7.5s infinite;
+}
+
+/* 差分は数が多いので、一粒ぶんの動きは小さく */
+.charSet__list li {
+  --reveal-y: 12px;
+  --reveal-blur: 3px;
+  transition:
+    transform 0.4s var(--ease-soft),
+    border-color 0.4s ease,
+    background-color 0.4s ease;
+}
+
+/*
+ * 出現用の transition は遅延を持っている（--i ぶん）。出きった後もそれが
+ * 残っていると、hover が数百ミリ秒待たされる。出た後だけ書き戻す。
+ */
+html[data-js="on"] .charSet__list li[data-revealed] {
+  transition:
+    transform 0.4s var(--ease-soft),
+    border-color 0.4s ease,
+    background-color 0.4s ease;
+}
+
+.charSet__list li:hover {
+  transform: translateY(-3px);
+  border-color: var(--blue-600);
+  background: rgba(32, 56, 120, 0.5);
+}
+
 /* ---------------- roboto ---------------- */
 
 .roboto {

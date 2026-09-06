@@ -72,6 +72,47 @@ export const about = {
   ],
 } as const;
 
+/**
+ * 立ち絵の節。絵そのものは src/components/Character.tsx が持っている
+ * （プロダクトの画像と同じ分け方）。id は向こうの一覧の鍵と揃えること。
+ *
+ * 表情のラベルは設定シートの呼び名に寄せてある。絵の印象とずれていると
+ * 感じたら、ここだけ直せばよい。
+ */
+export const character = {
+  label: "Character",
+  title: "立ち絵",
+  intro:
+    "配信に出ている姿です。青いスーツと、耳もとの音符が目印。角度と表情の差分も置いておきます。",
+  fullAlt:
+    "arial の全身立ち絵。青いスーツで水面に立ち、まわりに音符と水しぶきが舞っている",
+  angles: {
+    heading: "角度",
+    items: [
+      { id: "front", label: "正面" },
+      { id: "diagonal", label: "斜め" },
+      { id: "left", label: "左向き" },
+      { id: "right", label: "右向き" },
+      { id: "back", label: "後ろ" },
+    ],
+  },
+  faces: {
+    heading: "表情",
+    items: [
+      { id: "normal", label: "通常" },
+      { id: "smile", label: "笑顔" },
+      { id: "smile-closed", label: "目閉じ" },
+      { id: "wink", label: "ウィンク" },
+      { id: "singing", label: "歌唱" },
+      { id: "surprised", label: "驚き" },
+      { id: "shy", label: "照れ" },
+      { id: "troubled", label: "困り" },
+      { id: "sad", label: "悲しみ" },
+      { id: "angry", label: "怒り" },
+    ],
+  },
+} as const;
+
 export type Activity = {
   index: string;
   title: string;

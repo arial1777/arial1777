@@ -1,5 +1,6 @@
 import { About } from "@/components/About";
 import { Activities } from "@/components/Activities";
+import { Character } from "@/components/Character";
 import { Hero } from "@/components/Hero";
 import { Roboto } from "@/components/Roboto";
 import { songCount } from "@/content/songs";
@@ -19,6 +20,7 @@ export default async function Page() {
       <Hero />
       <About />
       <Activities songCount={songCount(artists)} />
+      <Character />
       <Roboto />
     </>
   );

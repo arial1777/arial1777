@@ -12,7 +12,7 @@ npm run typecheck  # tsc --noEmit
 
 | URL | 中身 |
 |---|---|
-| `/` | ヒーロー / About / 三つの活動（下2ページへの目次）/ ろぼと |
+| `/` | ヒーロー / About / 三つの活動（下2ページへの目次）/ 立ち絵 / ろぼと |
 | `/works` | 個人開発でつくったもの（オシノミ・ふら旅） |
 | `/songs` | 歌える曲の一覧。検索欄つき |
 | `/admin/songs` | 曲の管理画面。ベーシック認証で閉じてある |
@@ -34,6 +34,7 @@ npm run typecheck  # tsc --noEmit
 | /works ページの見出し・導入文 | `worksPage` |
 | プロダクト（オシノミ／ふら旅） | `works` |
 | ろぼとの紹介 | `roboto` |
+| 立ち絵の見出し・差分のラベル | `character`（絵そのものは `src/components/Character.tsx`） |
 | イラストレーターのクレジット | `credits.illustrator`（`null` のあいだはフッターに出ない） |
 | ヘッダーのナビ | `nav` |
 
@@ -138,6 +139,9 @@ Vercel なら環境変数に入れるだけ。
   白文字を置くと、明るい波紋の上で 2.4:1 まで落ちる。ヒーローの膜（`.hero__scrim`）の濃さは
   この実測から決めた。CTAボタンのグラデーションも、明るい側が 3.7:1 だったため終点を
   `#1D6FC0`（5.1:1）まで落としてある。現在は見出し・本文・チップ・CTAのすべてで AA 以上。
+- **立ち絵の差分（角度5点・表情10点）は遅延読み込み。** 折り返しより下にしか出ないので
+  初期表示の転送量には乗らない。1枚が最大でも130px相当で、AVIF に変換されると
+  数KBずつになる。`next/image` の `imageSizes` に小さい幅を並べてあるのはこのため。
 - **アニメーションは CSS のみ**で、`prefers-reduced-motion: reduce` で止まる。
 - **負の z-index を使っていない。** 背景画像・膜・本文を 0 / 1 / 2 の順で重ねている。
 - `robots.txt` / `sitemap.xml` / `manifest.webmanifest` / OGP画像 / Person・WebSite の
@@ -160,7 +164,7 @@ src/
 │   └── admin/            管理画面（ヘッダー・フッターなし、admin.css を持つ）
 │       └── songs/        page.tsx / SongsEditor.tsx / actions.ts
 ├── proxy.ts              /admin のベーシック認証
-├── components/           セクションごと
+├── components/           セクションごと（Character.tsx が立ち絵と差分）
 ├── content/
 │   ├── site.ts           文言はすべてここ
 │   ├── songs.ts          曲の型・文言・並べ替え・入力の検証
